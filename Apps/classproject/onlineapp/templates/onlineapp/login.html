@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     {% load static %}
+    <link href="{% static "onlineapp/bulma.css" %}" rel="stylesheet" type="text/css">
+    <style>
+        .pad
+        {
+            margin:10px auto;
+        }
+        .si
+        {
+            width:30%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="box pad">
+    <h1 class="title is-1">Login</h1>
+        <table class="table">
+            <tr>
+                {% if messages %}
+                    {% for message in messages %}
+                       <td>{{ message }}</td>
+                    {% endfor %}
+                {% endif %}
+            </tr>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_table }}
+                <tr><td><input class="button is-primary" type="submit" value="LOGIN"></td></tr>
+                <tr><td>Dont have an Account click to <a href="{% url 'signup_form'%}">Sign Up</a></td></tr>
+            </form>
+        </table>
+    </div>
+</body>
+</html>

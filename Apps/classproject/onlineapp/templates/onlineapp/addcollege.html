@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link href="{% static "onlineapp/bulma.css" %}" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<form  method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="button is-primary" type="submit">
+</form>
+</body>
+</html>

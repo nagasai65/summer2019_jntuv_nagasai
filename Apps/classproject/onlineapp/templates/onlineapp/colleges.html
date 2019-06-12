@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link href="{% static "onlineapp/bulma.css" %}" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<a href="{% url 'add_college' %}" class="button is-primary">ADD College</a>
+<a href="{% url 'logout' %}" class="button is-primary">Logout</a>
+<table class="table" border="1" cellpadding="10">
+    {% for row in colleges %}
+    <tr >
+    <td>{{ row.id }}</td>
+    <td><a href="{% url 'college_details' row.id %}">{{ row }}</a></td>
+        <td>{{ row.contact }}</td>
+
+        <td>
+            {% if 'onlineapp.change_college' in perm %}
+            <a href="{{row.id }}/edit">edit</a>&#47;
+            {% endif %}
+            {% if 'onlineapp.delete_college' in perm %}
+            <a href="{{ row.id }}/delete">delete</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

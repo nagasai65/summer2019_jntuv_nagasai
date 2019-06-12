@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+   {% if res %}
+    <table>
+        <tr>
+            <th>Acronym</th><th>College</th>
+        </tr>
+        {% for row in res %}
+        <tr>
+            <td><a href="/onlineapp/college_std_info/{{row.2}}">{{ row.0 }}</a></td>
+            <td>{{ row.1 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+</body>
+</html>

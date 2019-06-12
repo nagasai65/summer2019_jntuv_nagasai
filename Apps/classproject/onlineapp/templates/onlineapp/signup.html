@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link href="{% static "onlineapp/bulma.css" %}" rel="stylesheet" type="text/css">
+    <style>
+        .pad
+        {
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="box pad">
+
+    <h1 class="title is-1">Register</h1>
+    <table class="table">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <tr><td><input class="button is-primary" type="submit" value="Register"></td></tr>
+           <tr><td>Have an Accunt click to <a  href="{% url 'login_form'%}">Login</a></td></tr>
+        </form>
+        </table>
+    </div>
+</body>
+</html>

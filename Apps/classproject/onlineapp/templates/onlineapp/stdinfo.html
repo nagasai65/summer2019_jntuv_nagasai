@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     {% load static %}
+    <link href="{% static "onlineapp/bulma.css" %}" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<h1 class="title is-4">Stuents at {{ clg_name }}</h1>
+<br>
+<a href="add" class="button is-primary">ADD Student</a>
+<table class="table" border="1">
+
+    {% for row in std %}
+        <tr>
+        <td><a>{{ row.name }}</a></td>
+        <td><a href="{{ row.id }}/edit">edit</a> <a href="{{ row.id }}/delete">delete</a></td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

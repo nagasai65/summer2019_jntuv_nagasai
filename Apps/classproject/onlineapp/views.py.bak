@@ -1,0 +1,31 @@
+from django.shortcuts import render
+from django.http import *
+# Create your views here.
+def hello_world(request):
+    print(request.headers)
+    #val=request.headers['foo']
+    val=0
+    return HttpResponse(val)
+
+import django
+django.setup()
+from django.template import loader
+from onlineapp.models import *
+def get_college(request):
+    # res="<html><body><table border=1><th>Acronym</th><th>Name</th>"
+    # for i in College.objects.values_list('acronym','name'):
+    #     res+="<tr><td>"+i[0]+"</td><td>"+i[1]+"</td></tr>"
+    # res+="</table></body></html>"
+    # return HttpResponse(res)
+    template=loader.get_template('onlineapp/index.html')
+    values=College.objects.values_list('acronym','name','id')
+    context={'res':values}
+    return HttpResponse(template.render(context,request))
+    #return render(request,'onlineapp/index.html')
+
+def stdinfo(request,index):
+    template = loader.get_template('onlineapp/stdinfo.html')
+    values = Student.objects.filter(college__acronym=College.objects.get(id=index)).values_list('name', 'mocktest1__total', 'college__acronym')
+    print(index)
+    context = {'res': values}
+    return HttpResponse(template.render(context, request))
