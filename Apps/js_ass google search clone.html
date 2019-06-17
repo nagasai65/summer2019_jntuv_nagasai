@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="bulma-0.7.5/css/bulma.css" rel="stylesheet"type="text/css">
+    <title>Google</title>
+    <style>
+        .searchbar
+        {
+            width:70%;
+            margin-left:15%;
+        }
+        .suggestion
+        {
+            margin-top:3px;
+            width:70%;
+            margin-left:15%;
+            height:0;
+        }
+        #suggbox
+        {
+            width:100%;
+            border-radius:2%;
+        }
+        #suggbox>*:hover
+        {
+            background-color: lightgrey;
+        }
+    </style>
+</head>
+<body>
+        <h1 class="is-size-1 has-text-warning has-text-centered has-text-weight-semibold is-family-sans-serif">MRND</h1>
+        <input class="input is-rounded has-text-centered searchbar" placeholder="Search" id="textbox" onkeyup="search()"/>
+        <div class="select is-multiple suggestion" id="sugg">
+          <select multiple id="suggbox" onchange="optionSelected()">
+          </select>
+        </div>
+<script>
+    document.onkeydown=getFocusOnSugg
+    function getFocusOnSugg(e)
+    {
+        if(e.keyCode==40)
+            document.getElementById("suggbox").children[0].focus()
+    }
+    document.getElementById("sugg").style.display="none";
+    words=[
+'Abba',
+'abbacomes',
+'abbacy',
+'Abbadide',
+'abbas',
+'abbasi',
+'abbassi',
+'Abbasside',
+'abbatial',
+'abbatical',
+'abbess',
+'abbey',
+'abbeystede'];
+    function search()
+    {
+        var x = document.getElementById("suggbox");
+            while(x.length > 0) {
+                x.remove(x.length - 1);
+            }
+        var inp=document.getElementById("textbox").value;
+            if(inp=="")
+            {
+                document.getElementById("sugg").style.display="none";
+                return;
+            }
+        var res=words.filter(function(x){if(x.includes(inp.toLowerCase()))return x})
+        document.getElementById("suggbox").size=res.length;
+        if(res.length>=1)
+            document.getElementById("sugg").style.display="block";
+        else
+            document.getElementById("sugg").style.display="none";
+        for(i=0;i<res.length;i++) {
+            var x = document.getElementById("suggbox");
+            var option = document.createElement("option");
+            option.text = res[i];
+            x.add(option);
+        }
+    }
+    function optionSelected()
+    {
+        sel_val=document.getElementById("suggbox").value;
+        document.getElementById("textbox").value=sel_val;
+        search();
+    }
+</script>
+</body>
+</html>

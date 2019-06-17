@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bulma-0.7.5/css/bulma.css" type="text/css">
+    <style>
+        .textbox
+        {
+            width:50%;
+            margin-left:25%;
+        }
+        #outer
+        {
+            display: grid;
+            grid-template-columns:auto auto auto;
+            grid-gap: 20px;
+        }
+        .inner{
+            display: block;
+            height:50vh;
+            margin:0 !important;
+            padding: 0 !important;
+            border:1px solid red;
+        }
+        .image
+        {
+            width:100%;
+
+            /*padding-bottom: 20px;*/
+        }
+
+        .image
+        {
+            height: -webkit-fill-available ;
+        }
+    </style>
+</head>
+<body>
+<input class="input is-large textbox" id="input" onkeyup="getArtists()" type="text">
+<br>
+<div class="box" id="outer">
+
+
+</div>
+<script>
+    function getArtists() {
+        var name=document.getElementById("input").value;
+        var url = "https://api.spotify.com/v1/search?q="+name+"&type=artist";
+
+        fetch(url,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer BQA-M9yRVwFkQXtA0T5OP2bO6OwFs61VEXIQ8f7NMx5ldUa9HIFVXzC1RmTYx7TpQlBhSHneOKgDZ0Z3PccjfAdoO4fjzel67c0uMck5VGgoRN1857iEoLfNagTE5RIIQaHYXjml_rXeLvE9sROvJm0BT4_YaxlYQSZTProcv_Bj8XjfuKFgRkQ3PHDq_TWxMKOUVU5vc8Drp4BEouhAwdjP7fBgfZGk9XyFiqvJSJRXophRhkzEPAEeAhWl7ByYmtp8YGNw28IyUKuZOe5oFeFyvVuDrRQNsc0"
+                }
+            }).then(data => {
+            jsondat = data.json().then(result => {
+                document.getElementById("outer").innerText="";
+                if(result.artists.items.length==0)
+                    return;
+
+                for (i = 0; i < result.artists.items.length; i++)
+                {
+                    outer=document.createElement("div")
+                    outer.setAttribute('class','box inner')
+                    img=document.createElement("img");
+                    img.src=result.artists.items[i].images[0].url;
+                    // img.height=300;
+                    // img.width=300;
+                    img.setAttribute('class','image')
+                    outer.appendChild(img);
+
+                    label=document.createElement("h1");
+                    label.innerText=result.artists.items[i].name;
+                    label.setAttribute('class','title is-5')
+                    outer.appendChild(label);
+
+                    label=document.createElement("h1");
+                    label.innerText="Followers:"+result.artists.items[i].followers.total
+                    label.setAttribute('class','title is-5')
+                    outer.appendChild(label);
+
+                    console.log(result.artists.items[i].name)
+                    document.getElementById("outer").appendChild(outer);
+                }
+            });
+        });
+    }
+    // fetch("http://api.github.com/users/octocat").then(data=>{
+    //     jsondat=data.json().then(data=>{
+    //         console.log("local",data);
+    //     })
+    //     console.log("outer:",data)
+    // });
+    // const promiseArray=[];
+    // for(i=0;i<105;i++)
+    // {
+    //     newprom=new Promise((resolve,reject)=> {
+    //             resolve(i);
+    //             console.log("Executing ", i)
+    //         }
+    //     )
+    //     newprom.then((num)=>{console.log("Done ",num)});
+    //     promiseArray.push(newprom);
+    // }
+    //
+    // console.log(promiseArray);
+    //
+    // debugger;
+    //
+    // Promise.all(promiseArray).then(()=>console.log("finish"))
+    // console.log("bye")
+    // console.log("1.welcome")
+    // debugger;
+    // const promise=new Promise((resolve,reject)=>{
+    //
+    //     data={
+    //         "name":"xx",
+    //         "email":"bu@gfd"
+    //     }
+    //     setTimeout(()=>{
+    //         console.log("Waiting");
+    //         resolve(data);
+    //     },2000);
+    //     //resolve(data);
+    //     console.log("2.in")
+    // });
+    // console.log("3.",promise)
+    // promise.then(data=>console.log("4.",data)).catch(err=>console.error("Error:",err))
+    //
+    // console.log("5.bye")
+</script>
+</body>
+</html>
