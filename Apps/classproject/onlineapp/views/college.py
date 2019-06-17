@@ -4,13 +4,17 @@ from django.urls import resolve
 from django.shortcuts import *
 from onlineapp.forms.college import *
 from django.contrib.auth.models import Permission
+import logging
+logger=logging.getLogger("log.log")
 class CollegeView(LoginRequiredMixin,View):
 
     login_url = 'login_form'
     def get(self,request,*args,**kwargs):
-
+        logger.info("debug info")
+        logger.error("Error info")
         if kwargs:
             #college=College.objects.get(**kwargs)
+
             college=get_object_or_404(College,**kwargs)
             students=list(college.student_set.order_by('college__name'))
             return render(

@@ -5,10 +5,17 @@ from django.contrib import admin
 from django.urls import path,include
 from onlineapp.views import *
 from onlineapp.views import restcollegeview
+
 urlpatterns = [
 
+   path('api/v1/token/', generateToken.as_view(), name='token_obtain_pair'),
+
+
+   path('test/',sam),
+   path('api/v1/colleges/<int:pk>/students/<int:id>/',StudentView.as_view(),name='student_edit'),
+   path('api/v1/colleges/<int:pk>/students/',StudentView.as_view(),name='students'),
    path('api/v1/colleges/',restcollegeview.college_list),
-   path('api/v1/colleges/<int:pk>',restcollegeview.college_details),
+   path('api/v1/colleges/<int:pk>/',restcollegeview.college_details),
 
     path('admin/', admin.site.urls),
    # path('hello/', views.hello_world),

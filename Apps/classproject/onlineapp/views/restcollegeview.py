@@ -1,10 +1,15 @@
 from  rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication,TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from onlineapp.serializers import CollegeSerializer
 from onlineapp.models import College
 
-@api_view(['GET','POST'])
+
+@api_view(['GET', 'POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication,TokenAuthentication))
+@permission_classes((IsAuthenticated,))
 def college_list(request):
     if request.method == 'GET':
         colleges=College.objects.all()
@@ -19,6 +24,8 @@ def college_list(request):
 
 
 @api_view(['GET','PUT','DELETE'])
+@authentication_classes((SessionAuthentication, BasicAuthentication,TokenAuthentication))
+@permission_classes((IsAuthenticated,))
 def college_details(request,pk):
     try:
         college=College.objects.get(pk=pk)

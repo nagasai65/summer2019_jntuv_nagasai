@@ -25,7 +25,7 @@ SECRET_KEY = 'v^7pw4_f1(r56je^r&14!zjp)ydb8$dv56!1n-a+-oj5l0(ja)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sma","localhost","127.0.0.1"]
 
 
 # Application definition
@@ -40,16 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 
 MIDDLEWARE = [
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -72,6 +74,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'classproject.wsgi.application'
 
@@ -130,5 +134,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 INTERNAL_IPS=['127.0.0.1']
-
+#INTERNAL_IPS=['192.168.2.34']
 
