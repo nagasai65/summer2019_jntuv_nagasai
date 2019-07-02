@@ -1,0 +1,1 @@
+int colorsort2_main();

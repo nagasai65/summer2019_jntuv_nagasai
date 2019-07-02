@@ -1,0 +1,1 @@
+int clone_hash_main();

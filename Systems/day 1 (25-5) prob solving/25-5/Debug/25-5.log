@@ -1,0 +1,22 @@
+﻿Build started 26-05-2019 08:14:44.
+     1>Project "c:\Users\Dell\documents\visual studio 2013\Projects\25-5\25-5\25-5.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt colorsort2.cpp
+         colorsort2.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\dell\documents\visual studio 2013\Projects\25-5\Debug\25-5.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\dell\documents\visual studio 2013\Projects\25-5\Debug\25-5.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\dell\documents\visual studio 2013\Projects\25-5\Debug\25-5.lib" /MACHINE:X86 Debug\addlists.obj
+         Debug\clone_using_hash.obj
+         Debug\clone_using_new.obj
+         Debug\colorsort2.obj
+         Debug\colorsort3.obj
+         Debug\reverseEveryKNodes.obj
+         Debug\Source.obj
+         Debug\spiral.obj
+         Debug\strcompress.obj
+         Debug\transpose.obj
+         25-5.vcxproj -> c:\users\dell\documents\visual studio 2013\Projects\25-5\Debug\25-5.exe
+     1>Done Building Project "c:\Users\Dell\documents\visual studio 2013\Projects\25-5\25-5\25-5.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.57

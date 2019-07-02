@@ -1,0 +1,1 @@
+int strcompress_main();
