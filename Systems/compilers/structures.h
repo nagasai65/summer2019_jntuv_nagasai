@@ -1,30 +1,41 @@
-#define NAMELEN 32
-struct SymTabStruct
+#define NAMELEN 20
+struct SymbolTable
 {
 	char name[NAMELEN];
-	unsigned int address;
-	unsigned int size;
+	int address;
+	int size;
+	struct SymbolTable *next;
 };
-struct BlockAddresses
+struct LabelTable
 {
-	char blockname;
-	unsigned int address;
+	char blockname[NAMELEN];
+	int address;
+	struct LabelTable *next;
 };
-struct headerStruct
+struct Stack
 {
-	unsigned int current_memory_address;
-	unsigned int noof_symboltable_entries;
-	unsigned int noof_instructions;
-	unsigned int noof_blocks;
-	int *memory;
+	int instruction_num;
+	struct Stack *next;
 };
-struct instrTabStruct
+struct ConstValues
 {
-	unsigned int InNo;
-	int Opcode;
-	int parameters[6];
+	int address;
+	int value;
+	struct ConstValues *next;
 };
-struct stack
+struct Collection
 {
-
+	struct SymbolTable *symboltable;
+	struct ConstValues *const_values;
+	int noofconstantvalues;
+	int noofinstructions;
+	int **instrtab;
+	int current_memory_address;
+	struct LabelTable *labeltable;
+	struct Stack *stack;
+};
+struct PreserveOnFile
+{
+	int noof_instructions;
+	int noof_constant_values;
 };
