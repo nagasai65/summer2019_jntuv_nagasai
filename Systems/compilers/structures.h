@@ -38,4 +38,13 @@ struct PreserveOnFile
 {
 	int noof_instructions;
 	int noof_constant_values;
+	int current_memory_address;
+};
+struct ExecCollection
+{
+	int **instrtab;
+	struct ConstValues *const_values;
+	struct PreserveOnFile *pof;
+	int registers[8];
+	int *memory;
 };

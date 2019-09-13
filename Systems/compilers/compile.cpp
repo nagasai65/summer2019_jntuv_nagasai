@@ -1,52 +1,12 @@
 #include "includeheaders.h"
-#include"structures.h"
-void error(char *msg)
+#include "structures.h"
+#include "strfuns.h"
+static void error(char *msg)
 {
 	printf("ERROR: %s\n", msg);
 	exit(1);
 }
-void splitString(char *line, char *str1, char* str2,char sep)
-{
-	while (line[0] == ' ' )
-		line++;
-	int index = 0;
-	while (line[0] != sep && line[0] != '\0' && line[0] != ' ' && line[0] != '\n')
-	{
-		str1[index++] = line[0];
-		line++;
-	}
-	str1[index] = '\0';
-	if (line[0] == '\0')
-	{
-		str2[0] = '\0';
-		return;
-	}
-	if (str2[0] == '\0')
-		return;
-	index = 0;
-	while (line[0] == ' ' || line[0] == sep)
-		line++;
-	while (line[0] != '\n' && line[0] != '\0')
-	{
-		str2[index++] = line[0];
-		line++;
-	}
 
-	str2[index] = '\0';
-}
-char check(char *str1, char *str2)
-{
-	while (str1[0]!='\0' && str2[0]!='\0')
-	{
-		if (str1[0] != str2[0])
-			return 0;
-		str1++;
-		str2++;
-	}
-	if (!str1[0] && !str2[0])
-		return 1;
-	return 0;
-}
 short int getRegCode(char *reg)
 {
 	return reg[0] - 'A';
@@ -88,14 +48,6 @@ short int getOpcode(char *str,char *param)
 		return 13;
 	if (check("READ", str))
 		return 14;
-}
-char checkSymbolInStr(char *str, char c)
-{
-	while (str[0] != '\0' && str[0] != c)
-		str++;
-	if (str[0] == '\0')
-		return 0;
-	return 1;
 }
 int getMemAddress(char *str,int index, struct Collection *collection)
 {
@@ -148,8 +100,10 @@ void processDATA(char *str, struct Collection *collection)
 	int size = getIndexName(str);
 	addSymbToSymbTab(str, size, collection);
 }
-int getNoofLocationsUsingOpcode(int opcode)
+static int getNoofLocationsUsingOpcode(int opcode)
 {
+	if (opcode == -1)
+		return 2;
 	if (opcode == 1 || opcode == 2)
 		return 4;
 	if (opcode >= 3 && opcode <= 5)
@@ -179,9 +133,9 @@ void processCONST(char *str, struct Collection *collection)
 		error("Unable to allocate memory at processConst()");
 	splitString(str, str1, str2, '='); 
 	addSymbToSymbTab(str1, 0, collection);
-	collection->current_memory_address++;
-	sscanf(str2, "%d", value);
+	sscanf(str2, "%d", &value);
 	addAddressValueToConstStruct(collection, value);
+	collection->current_memory_address++;
 	collection->noofconstantvalues++;
 	free(str1);
 	free(str2);
@@ -284,7 +238,7 @@ void processBlock(char *str, struct Collection *collection)
 	splitString(str, str1, "\0", ':');
 	if (check(str1, "START"))
 	{
-		printf("Program starts:\n");
+		//printf("Program starts:\n");
 		return;
 	}
 	addBlockToLabelTab(str1, collection);
@@ -400,6 +354,15 @@ void processPRINT(char *str, struct Collection *collection)
 	else
 		collection->instrtab[noofinstr - 1][2] = getMemAddress(str,0,collection);
 }
+void processEND(struct Collection *collection)
+{
+	collection->noofinstructions++;
+	collection->instrtab = (int**)realloc(collection->instrtab, sizeof(int*)*collection->noofinstructions);
+	collection->instrtab[collection->noofinstructions - 1] = (int*)malloc(2 * sizeof(int));
+	collection->instrtab[collection->noofinstructions - 1][0] = collection->noofinstructions;
+	collection->instrtab[collection->noofinstructions - 1][1] = -1;
+}
+
 void callFun(char *str1, char *str2, struct Collection *collection)
 {
 
@@ -458,6 +421,12 @@ void callFun(char *str1, char *str2, struct Collection *collection)
 		processBlock(str1, collection);
 		return;
 	}
+	if (check(str1, "END"))
+	{
+		processEND(collection);
+		return;
+	}
+
 }
 void processLine(char *line, struct Collection *collection)
 {
@@ -479,10 +448,12 @@ void readInpFile(FILE *inpfile, struct Collection *collection)
 	while (!feof(inpfile))
 	{
 		fgets(line, 100, inpfile);
-		processLine(line,collection);
+		if (line[0] != '\n')
+			processLine(line,collection);
 	}
 	free(line);
 }
+
 void initCollection(struct Collection *collection)
 {
 	collection->symboltable = NULL;
@@ -527,14 +498,15 @@ void writeInstructionsToFile(FILE *file, int **instrtab, int noofinstructions)
 }
 void writeConstantValuesToFile(FILE *file, struct ConstValues *constvalues)
 {
-	int *values = (int*)malloc(2);
+	int *values = (int*)malloc(sizeof(int)*2);
+	if (values == NULL)
+		error("Unable to allocate memory at writeConstantValuesToFile()");
 	while (constvalues != NULL)
 	{
 		values[0] = constvalues->address;
 		values[1] = constvalues->value;
 		fwrite(values, sizeof(int), 2, file);
 		constvalues = constvalues->next;
-
 	}
 	free(values);
 }
@@ -545,6 +517,7 @@ void writeICToFile(FILE *file, struct Collection *collection)
 		error("Unable to allocate memory for struct in writeICToFile()");
 	preservestruct->noof_instructions = collection->noofinstructions;
 	preservestruct->noof_constant_values = collection->noofconstantvalues;
+	preservestruct->current_memory_address = collection->current_memory_address;
 	fwrite(preservestruct, sizeof(struct PreserveOnFile), 1, file);
 	writeInstructionsToFile(file, collection->instrtab, collection->noofinstructions);
 	writeConstantValuesToFile(file, collection->const_values);
@@ -593,9 +566,26 @@ void freeCollection(struct Collection *collection)
 	freeStack(collection->stack);
 	freeSymbTab(collection->symboltable);
 }
-int main()
+char* setOutputFileName(char *str,int n)
 {
-	FILE *inpfile = fopen("input2.txt", "r");
+	char *res;
+	if (str[n] == '.')
+	{
+		res = (char*)malloc(n + 5);
+		res[n] = '.';
+		res[n + 1] = 'n';
+		res[n + 2] = 'a';
+		res[n + 3] = 'g';
+		res[n + 4] = '\0';
+		return res;
+	}
+	res = setOutputFileName(str, n + 1);
+	res[n] = str[n];
+	return res;
+}
+int compile(char *filename)
+{
+	FILE *inpfile = fopen(filename, "r");
 	if (inpfile == NULL)
 		error("Unable to open Input File");
 	struct Collection *collection = (struct Collection*)malloc(sizeof(struct Collection));
@@ -604,11 +594,16 @@ int main()
 	initCollection(collection);
 	readInpFile(inpfile,collection);
 	fclose(inpfile);
-	printInstrTab(collection->instrtab, collection->noofinstructions);
-	FILE *outfile = fopen("output.txt", "wb");
+	//printInstrTab(collection->instrtab, collection->noofinstructions);
+	char *opname = setOutputFileName(filename,0);
+	FILE *outfile = fopen(opname, "wb");
 	if (outfile == NULL)
 		error("Unable to open Output File");
 	writeICToFile(outfile, collection);
+	printf("Compiled Successful!!!\n");
+	free(opname);
+	fclose(outfile);
 	freeCollection(collection);
 	free(collection);
+	return 0;
 }
